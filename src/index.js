@@ -8,34 +8,27 @@ module.exports = function check(str, bracketsConfig) {
         CloseArr[i] = bracketsConfig[i][1]; 
     }
     if( strArr.length % 2 != 0 ) return false;
-    let numb;
-    for(let i = 0; i < strArr.length; i++)
+    let numb = null, position = null;
+    while(strArr.length > 0)
     {
-        numb = null;
-        if(strArr[i] === undefined) continue;
-        for(let j = 0; j < OpenArr.length; j++)
+        position = null;
+        for(let i = strArr.length - 2; i >= 0; i--)
         {
-            if(strArr[i] == OpenArr[j])
+            for(let j = 0; j < OpenArr.length; j++)
             {
-                numb = j;
-                break;
+                if(strArr[i] == OpenArr[j])
+                {
+                    numb = j;
+                    position = i;
+                    break;
+                }
             }
+            if(position === i) break;
         }
-        if(numb === null) return false;
-        for(let k = i + 1; k < strArr.length; k++)
+        if(strArr[position + 1] == CloseArr[numb])
         {
-            if(strArr[k] == CloseArr[numb])
-            {
-                strArr[i] = undefined;
-                strArr[k] = undefined;
-                break;
-            }
-        }
-    }
-    for(let i = 0; i < strArr.length; i++) console.log(strArr[i]);
-    for(let i = 0; i < strArr.length; i++)
-    {
-        if(strArr[i] !== undefined) return false;
+            strArr.splice(position, 2);
+        } else return false;
     }
     return true;
 }
